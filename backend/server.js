@@ -72,6 +72,18 @@ app.post("/generate", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+const SERVER_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
-});
+
+  // 🔥 KEEP-ALIVE: Ping self every 14 min to prevent Render free tier sleep
+  setInterval(async () => {
+    try {
+      await fetch(`${SERVER_URL}/health`);
+      console.log("💓 Keep-alive ping sent");
+    } catch (err) {
+      console.log("⚠️ Keep-alive ping failed:", err.message);
+    }
+  }, 14 * 60 * 1000); // 14 minutes
+});
