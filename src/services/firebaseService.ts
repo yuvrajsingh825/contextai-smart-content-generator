@@ -25,14 +25,20 @@ import {
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 
-// We'll import the config from the generated file later
-// For now, we'll use a placeholder or wait for the system to create it
-// Since we called set_up_firebase, the file will be firebase-applet-config.json
-import firebaseConfig from "../../firebase-applet-config.json";
+// Firebase config from environment variables (works in both dev and Vercel)
+const firebaseConfig = {
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+};
+const firestoreDatabaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID;
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, firestoreDatabaseId);
 
 const googleProvider = new GoogleAuthProvider();
 
