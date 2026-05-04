@@ -1,17 +1,17 @@
 {
-  "name": "backend",
+  "name": "contextai-backend",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Yuvraj Singh",
   "license": "ISC",
-  "description": "",
+  "description": "ContextAI Express backend - AI content generation API",
   "dependencies": {
-    "@google/genai": "^1.51.0",
     "cors": "^2.8.6",
     "express": "^5.2.1"
   }
