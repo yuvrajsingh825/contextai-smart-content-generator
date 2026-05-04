@@ -1,5 +1,8 @@
-// ✅ USE VITE PROXY
-const BASE_URL = "/api";
+// In dev: uses Vite proxy (/api → localhost:5000)
+// In production (Vercel): calls Render backend directly
+const BASE_URL = import.meta.env.VITE_BACKEND_URL
+  ? `${import.meta.env.VITE_BACKEND_URL}`
+  : "/api";
 
 export const CONTENT_TEMPLATES = {
   blog: "Write a high-quality SEO-optimized blog post about {topic}. Target Audience: {audience}. Call to Action: {cta}. Included keywords: {keywords}. Tone: {tone}. Structure: Introduction, 3-4 subheadings, Conclusion.",
