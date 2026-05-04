@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    
+    // --- Users Collection ---
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      
+      allow create: if isOwner(userId) 
+        && isValidId(userId)
+        && isValidUser(incoming())
+        && incoming().freeCredits == 50
+        && incoming().paidCredits == 0;
+        
+      allow update: if isOwner(userId)
+        && isValidUser(incoming())
+        && incoming().get('email', '') == existing().get('email', '')
+        && incoming().get('createdAt', request.time) == existing().get('createdAt', request.time)
+        && (
+          // Action: Migration / Daily Reset
+          (incoming().diff(existing()).affectedKeys().hasAny(['freeCredits', 'lastCreditReset', 'paidCredits', 'plan'])
+           && (incoming().get('freeCredits', 0) == 50 || incoming().get('freeCredits', 0) == existing().get('freeCredits', 0))
+           && (incoming().get('lastCreditReset', request.time) == request.time || incoming().get('lastCreditReset', request.time) == existing().get('lastCreditReset', request.time))
+          )
+          ||
+          // Action: Content Generation (Cost Deduction)
+          (incoming().diff(existing()).affectedKeys().hasOnly(['freeCredits', 'paidCredits'])
+           && (
+             // Case 1: Deduct from free credits
+             (existing().get('freeCredits', 0) >= 5 && incoming().freeCredits == existing().get('freeCredits', 0) - 5 && incoming().paidCredits == existing().get('paidCredits', 0))
+             ||
+             // Case 2: Deduct from free then paid
+             (existing().get('freeCredits', 0) < 5 && incoming().freeCredits == 0 && incoming().paidCredits == existing().get('paidCredits', 0) - (5 - existing().get('freeCredits', 0)))
+           ))
+          ||
+          // Action: Name change
+          (incoming().diff(existing()).affectedKeys().hasOnly(['name']) && incoming().name is string)
+        );
+    }
+
+    function isValidUser(data) {
+      return data.get('email', '') is string && data.get('email', '').size() > 0
+          && data.get('freeCredits', 0) is int && data.get('freeCredits', 0) >= 0
+          && data.get('paidCredits', 0) is int && data.get('paidCredits', 0) >= 0
+          && data.get('plan', 'free') in ['free', 'paid']
+          && (data.get('lastCreditReset', request.time) is timestamp)
+          && data.get('createdAt', request.time) is timestamp;
+    }
+
+    // --- Contents Collection ---
+    match /contents/{contentId} {
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      allow create: if isSignedIn() 
+        && isValidId(contentId)
+        && incoming().userId == request.auth.uid
+        && isValidContent(incoming())
+        // Verify user has enough total credits (free + paid)
+        && (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.freeCredits + 
+            get(/databases/$(database)/documents/users/$(request.auth.uid)).data.paidCredits >= 5);
+    }
+
+    function isValidContent(data) {
+      return data.userId is string && data.userId == request.auth.uid
+          && data.type in ['blog', 'ad', 'product', 'social', 'email']
+          && data.output is string && data.output.size() > 0 && data.output.size() < 100000
+          && data.input is map
+          && data.createdAt == request.time;
+    }
+  }
+}

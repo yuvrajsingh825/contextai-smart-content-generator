@@ -1,0 +1,42 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account and credit information",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "freeCredits": { "type": "integer" },
+        "paidCredits": { "type": "integer" },
+        "lastCreditReset": { "type": "object" },
+        "plan": { "type": "string" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["email", "freeCredits", "paidCredits", "lastCreditReset", "plan", "createdAt"]
+    },
+    "Content": {
+      "title": "Generated Content",
+      "description": "Content history for a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["blog", "ad", "product", "social", "email"] },
+        "input": { "type": "object" },
+        "output": { "type": "string" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["userId", "type", "input", "output", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Individual user profiles"
+    },
+    "/contents/{contentId}": {
+      "schema": "Content",
+      "description": "History of generated content"
+    }
+  }
+}
