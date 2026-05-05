@@ -20,12 +20,11 @@ export default function AdUnit({ slot, format = 'auto', className = '' }: AdUnit
     <div className={`overflow-hidden rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center p-4 min-h-[100px] ${className}`}>
       {/* 
         This is the actual Google AdSense unit.
-        You must replace data-ad-client with your publisher ID once approved.
       */}
       <ins
         className="adsbygoogle"
         style={{ display: 'block', width: '100%' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // TODO: Replace with your AdSense Publisher ID
+        data-ad-client="ca-pub-8392128632369250"
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive="true"
