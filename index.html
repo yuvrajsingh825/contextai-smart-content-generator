@@ -3,7 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ContextAI - Smart Content Generator</title>
+
+    <!-- Primary SEO -->
+    <title>ContextAI — Free AI Content Generator for Creators & Marketers</title>
+    <meta name="description" content="ContextAI is a free AI-powered content generator. Create SEO blogs, LinkedIn posts, YouTube scripts, Twitter threads, cold emails, and more — in seconds. No credit card required." />
+    <meta name="keywords" content="AI content generator, free AI writer, blog post generator, LinkedIn post AI, YouTube script generator, Twitter thread generator, cold email AI, content marketing tool" />
+    <meta name="author" content="Yuvraj Singh" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://contextai-smart-content-generator.vercel.app/" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://contextai-smart-content-generator.vercel.app/" />
+    <meta property="og:title" content="ContextAI — Free AI Content Generator" />
+    <meta property="og:description" content="Generate blogs, LinkedIn posts, YouTube scripts, Twitter threads & more with AI. 100% free. No credit card needed." />
+    <meta property="og:image" content="https://contextai-smart-content-generator.vercel.app/og-image.png" />
+    <meta property="og:site_name" content="ContextAI" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://contextai-smart-content-generator.vercel.app/" />
+    <meta name="twitter:title" content="ContextAI — Free AI Content Generator" />
+    <meta name="twitter:description" content="Generate blogs, LinkedIn posts, YouTube scripts, Twitter threads & more with AI. 100% free. No credit card needed." />
+    <meta name="twitter:image" content="https://contextai-smart-content-generator.vercel.app/og-image.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Analytics 4 — Add your Measurement ID to Vercel env as VITE_GA4_ID -->
+    <script>
+      window.GA4_ID = '%VITE_GA4_ID%';
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA4_ID%"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '%VITE_GA4_ID%', { send_page_view: false });
+    </script>
+
+    <!-- Razorpay -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </head>
   <body>
@@ -11,4 +50,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

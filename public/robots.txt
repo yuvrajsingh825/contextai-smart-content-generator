@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://contextai-smart-content-generator.vercel.app/sitemap.xml

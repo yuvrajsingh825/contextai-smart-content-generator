@@ -4,6 +4,7 @@ import { Sparkles, LayoutDashboard, PenTool, User as UserIcon, Zap, LogOut } fro
 import { cn } from '../lib/utils';
 import Logo from './Logo';
 import { logOut } from '../services/firebaseService';
+import ShareButton from './ShareButton';
 
 interface NavigationProps {
   user: any;
@@ -51,6 +52,8 @@ export default function Navigation({ user, profile }: NavigationProps) {
 
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-3">
+                {user?.uid && <ShareButton userId={user.uid} compact={true} />}
+                
                 <div className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden group transition-all duration-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]">
                   <div className="absolute inset-0 bg-emerald-400/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
                   <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.8)] relative z-10 animate-pulse" />

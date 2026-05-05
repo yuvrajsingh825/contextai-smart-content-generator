@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, getUserProfile } from './services/firebaseService';
+import { processReferral } from './services/referralService';
+import { trackPageView } from './hooks/useAnalytics';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -14,6 +16,15 @@ import ProfilePage from './pages/ProfilePage';
 import Navigation from './components/Navigation';
 import CreatorTag from './components/CreatorTag';
 import { Loader2 } from 'lucide-react';
+
+// Track page views on route change
+function RouteTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location]);
+  return null;
+}
 
 const ProtectedRoute = ({ user, loading, children }: { user: any, loading: boolean, children: React.ReactNode }) => {
   if (loading) return (
@@ -37,6 +48,8 @@ export default function App() {
         try {
           const userProfile = await getUserProfile(currentUser.uid);
           setProfile(userProfile);
+          // Process referral attribution on first login
+          await processReferral(currentUser.uid);
         } catch (error) {
           console.error("Error fetching profile:", error);
         }
@@ -58,6 +71,7 @@ export default function App() {
 
   return (
     <Router>
+      <RouteTracker />
       <div className="h-screen flex flex-col bg-[#020617] text-slate-100 selection:bg-blue-500/30 font-sans relative overflow-hidden">
         {/* Background Blobs */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">

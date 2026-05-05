@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Zap, CreditCard, Shield, Star, Check, Loader2 } from 'lucide-react';
 import { cn, formatNumber } from '../lib/utils';
+import ShareButton from '../components/ShareButton';
 
 interface ProfilePageProps {
   user: any;
@@ -96,6 +97,17 @@ export default function ProfilePage({ user, profile }: ProfilePageProps) {
          </div>
          {/* Decorative blob inside */}
          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-3xl rounded-full -mr-32 -mt-32 pointer-events-none" />
+      </section>
+
+      {/* Share & Referral */}
+      <section className="mb-12">
+        <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-indigo-500/10 to-purple-500/5 border border-indigo-500/20 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <h3 className="text-lg font-black text-white mb-1">Share ContextAI with friends</h3>
+            <p className="text-slate-500 text-sm font-medium">Get a personal referral link and track how many people join through you!</p>
+          </div>
+          {user?.uid && <ShareButton userId={user.uid} />}
+        </div>
       </section>
 
       {/* Credit Refills */}
