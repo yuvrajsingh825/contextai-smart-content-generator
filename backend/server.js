@@ -1,38 +1,38 @@
 import express from "express";
 import cors from "cors";
+import Groq from "groq-sdk";
 
 const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
   "https://contextai-smart-content-generator.vercel.app",
-  // Allow any vercel preview URLs too
   /\.vercel\.app$/
 ];
 
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
-    
-    const isAllowed = allowedOrigins.some(allowed => 
+    const isAllowed = allowedOrigins.some(allowed =>
       typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
     );
-    
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      callback(null, true); // Allow all for now, can restrict later
-    }
+    callback(null, true); // Allow all for now
   },
   credentials: true
 }));
 app.use(express.json());
 
+// Initialize Groq client
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
+
+// Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
+// AI Content Generation endpoint
 app.post("/generate", async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -41,33 +41,36 @@ app.post("/generate", async (req, res) => {
       return res.status(400).json({ error: "Prompt missing" });
     }
 
-    console.log("🚀 Generating with free AI API...");
-    const encodedPrompt = encodeURIComponent(prompt);
+    console.log("🚀 Generating with Groq AI...");
 
-    // Add a 60-second timeout
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 60000);
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are ContextAI, an expert content writer and marketing strategist. You create high-quality, engaging, and professional content. Always provide well-structured, detailed responses tailored to the user's request. Do not include meta-commentary about the task — just write the content directly."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.7,
+      max_tokens: 2048,
+    });
 
-    const fetchResponse = await fetch(
-      `https://text.pollinations.ai/${encodedPrompt}`,
-      { signal: controller.signal }
-    );
-    clearTimeout(timeout);
+    const text = chatCompletion.choices[0]?.message?.content || "";
 
-    if (!fetchResponse.ok) {
-      throw new Error(`AI API error: ${fetchResponse.status}`);
+    if (!text) {
+      throw new Error("Empty response from Groq");
     }
 
-    const text = await fetchResponse.text();
+    console.log("✅ Content generated successfully");
     res.json({ text });
 
   } catch (error) {
     console.error("🔥 ERROR:", error);
-    if (error.name === "AbortError") {
-      res.status(504).json({ error: "AI request timed out. Please try again." });
-    } else {
-      res.status(500).json({ error: error.message || "Something went wrong" });
-    }
+    res.status(500).json({ error: error.message || "Something went wrong" });
   }
 });
 
@@ -75,9 +78,9 @@ const PORT = process.env.PORT || 5000;
 const SERVER_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ ContextAI Backend running on port ${PORT}`);
 
-  // 🔥 KEEP-ALIVE: Ping self every 14 min to prevent Render free tier sleep
+  // 💓 Keep-alive ping every 14 min to prevent Render free tier sleep
   setInterval(async () => {
     try {
       await fetch(`${SERVER_URL}/health`);
@@ -85,5 +88,5 @@ app.listen(PORT, () => {
     } catch (err) {
       console.log("⚠️ Keep-alive ping failed:", err.message);
     }
-  }, 14 * 60 * 1000); // 14 minutes
-});
+  }, 14 * 60 * 1000);
+});
