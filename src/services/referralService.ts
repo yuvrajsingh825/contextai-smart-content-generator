@@ -15,19 +15,21 @@ const APP_URL = 'https://contextai-smart-content-generator.vercel.app';
 
 /**
  * Get or create a referral record for a user.
- * Returns the user's unique referral link.
+ * Returns the user's unique referral link instantly.
  */
-export async function getOrCreateReferralLink(userId: string): Promise<string> {
+export function getOrCreateReferralLink(userId: string): string {
   const refDoc = doc(db, 'referrals', userId);
-  const snap = await getDoc(refDoc);
-
-  if (!snap.exists()) {
-    await setDoc(refDoc, {
-      userId,
-      referralCount: 0,
-      createdAt: new Date().toISOString(),
-    });
-  }
+  
+  // Fire-and-forget the document creation so we don't block the UI
+  getDoc(refDoc).then(async (snap) => {
+    if (!snap.exists()) {
+      await setDoc(refDoc, {
+        userId,
+        referralCount: 0,
+        createdAt: new Date().toISOString(),
+      });
+    }
+  }).catch(err => console.error("Referral creation error:", err));
 
   return `${APP_URL}/?ref=${userId}`;
 }

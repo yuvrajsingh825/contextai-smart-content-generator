@@ -18,15 +18,22 @@ export default function ShareButton({ userId, compact = false }: ShareButtonProp
 
   useEffect(() => {
     if (!userId) return;
+    
+    // Get the link instantly so the buttons work immediately
+    const link = getOrCreateReferralLink(userId);
+    setRefLink(link);
+
+    // Fetch the count in the background
     (async () => {
       setLoading(true);
-      const [link, count] = await Promise.all([
-        getOrCreateReferralLink(userId),
-        getReferralCount(userId),
-      ]);
-      setRefLink(link);
-      setReferralCount(count);
-      setLoading(false);
+      try {
+        const count = await getReferralCount(userId);
+        setReferralCount(count);
+      } catch (err) {
+        console.error("Failed to load referral count", err);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [userId]);
 
