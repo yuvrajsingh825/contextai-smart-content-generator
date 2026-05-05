@@ -53,6 +53,9 @@ const CONTENT_TYPES = [
   { id: 'ad', label: 'Ad Copy (FB/Google)', icon: Hash, color: 'text-purple-400', bg: 'bg-purple-500/10' },
   { id: 'product', label: 'Product Description', icon: PenTool, color: 'text-orange-400', bg: 'bg-orange-500/10' },
   { id: 'email', label: 'Email Sequence', icon: Type, color: 'text-indigo-400', bg: 'bg-indigo-500/10' },
+  { id: 'youtube', label: 'YouTube Script', icon: Bell, color: 'text-red-400', bg: 'bg-red-500/10' },
+  { id: 'twitter', label: 'Twitter/X Thread', icon: Hash, color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
+  { id: 'coldemail', label: 'Cold Email', icon: Send, color: 'text-violet-400', bg: 'bg-violet-500/10' },
 ];
 
 const TONALITIES = [
@@ -211,6 +214,58 @@ export default function GeneratorPage({ user, profile, onContentGenerated }: Gen
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
+  };
+
+  const handleRegenerate = () => {
+    handleGenerate();
+  };
+
+  const getStats = (text: string) => {
+    const words = text.trim().split(/\s+/).filter(Boolean).length;
+    const chars = text.length;
+    const readTime = Math.max(1, Math.ceil(words / 200));
+    return { words, chars, readTime };
+  };
+
+  // Simple inline markdown renderer
+  const renderMarkdown = (text: string) => {
+    return text.split('\n').map((line, i) => {
+      // Headings
+      if (line.startsWith('### ')) return <h3 key={i} className="text-lg font-black text-white mt-6 mb-2">{line.slice(4)}</h3>;
+      if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-black text-white mt-8 mb-3 border-b border-white/10 pb-2">{line.slice(3)}</h2>;
+      if (line.startsWith('# ')) return <h1 key={i} className="text-2xl font-black text-white mt-8 mb-4">{line.slice(2)}</h1>;
+      // Bullet points
+      if (line.startsWith('- ') || line.startsWith('* ')) {
+        const content = line.slice(2);
+        return <li key={i} className="flex gap-3 text-slate-300 text-sm leading-relaxed my-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2 shrink-0" />
+          <span>{renderInline(content)}</span>
+        </li>;
+      }
+      // Numbered list
+      if (/^\d+\.\s/.test(line)) {
+        const num = line.match(/^(\d+)\./)?.[1];
+        const content = line.replace(/^\d+\.\s/, '');
+        return <li key={i} className="flex gap-3 text-slate-300 text-sm leading-relaxed my-1.5">
+          <span className="text-indigo-400 font-black text-xs mt-0.5 shrink-0 w-4">{num}.</span>
+          <span>{renderInline(content)}</span>
+        </li>;
+      }
+      // Empty line
+      if (line.trim() === '') return <div key={i} className="h-3" />;
+      // Normal paragraph
+      return <p key={i} className="text-slate-200 text-base leading-[1.85] font-medium my-1">{renderInline(line)}</p>;
+    });
+  };
+
+  const renderInline = (text: string): React.ReactNode => {
+    const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) return <strong key={i} className="font-black text-white">{part.slice(2,-2)}</strong>;
+      if (part.startsWith('*') && part.endsWith('*')) return <em key={i} className="italic text-slate-300">{part.slice(1,-1)}</em>;
+      if (part.startsWith('`') && part.endsWith('`')) return <code key={i} className="px-1.5 py-0.5 rounded-md bg-white/10 text-indigo-300 text-xs font-mono">{part.slice(1,-1)}</code>;
+      return part;
+    });
   };
 
   const downloadAsPDF = () => {
@@ -398,14 +453,18 @@ export default function GeneratorPage({ user, profile, onContentGenerated }: Gen
                 <div className="flex items-center gap-3">
                   {output && (
                     <>
-                      <button onClick={() => setShowInsights(!showInsights)} className={cn("flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border", showInsights ? "bg-blue-600/10 text-blue-400 border-blue-500/20" : "bg-white/5 text-slate-500 border-white/10")}>
+                      <button onClick={handleRegenerate} disabled={loading} className="flex items-center gap-2 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 disabled:opacity-40">
+                        <RefreshCcw className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Regenerate</span>
+                      </button>
+                      <button onClick={() => setShowInsights(!showInsights)} className={cn("flex items-center gap-2 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border", showInsights ? "bg-blue-600/10 text-blue-400 border-blue-500/20" : "bg-white/5 text-slate-500 border-white/10")}>
                         <Zap className="w-3.5 h-3.5" />
-                        {showInsights ? "Hide Insights" : "Show Insights"}
+                        <span className="hidden sm:inline">{showInsights ? "Hide" : "Insights"}</span>
                       </button>
                       <button onClick={downloadAsPDF} className="p-3 bg-white/5 border border-white/10 rounded-2xl text-slate-400 hover:text-white transition-all"><Download className="w-4 h-4" /></button>
-                      <button onClick={() => { navigator.clipboard.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 2000); }} className="flex items-center gap-2 px-6 py-3 bg-white text-slate-950 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all">
+                      <button onClick={copyToClipboard} className="flex items-center gap-2 px-6 py-3 bg-white text-slate-950 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all">
                         {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                        {copied ? "Copied" : "Copy All"}
+                        {copied ? "Copied" : "Copy"}
                       </button>
                     </>
                   )}
@@ -437,10 +496,31 @@ export default function GeneratorPage({ user, profile, onContentGenerated }: Gen
                     </motion.div>
                   ) : output ? (
                     <motion.div key="output-content" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex-1">
-                      <div className="whitespace-pre-wrap font-sans leading-[1.8] text-lg text-slate-200 font-medium selection:bg-blue-500/30">
-                        {displayedOutput}
+                      {/* Stats Bar */}
+                      {displayedOutput === output && (() => {
+                        const stats = getStats(output);
+                        return (
+                          <div className="flex items-center gap-6 mb-8 pb-6 border-b border-white/5 flex-wrap">
+                            <span className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                              <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+                              {stats.words} words
+                            </span>
+                            <span className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                              <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                              ~{stats.readTime} min read
+                            </span>
+                            <span className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                              <Type className="w-3.5 h-3.5 text-blue-400" />
+                              {stats.chars.toLocaleString()} chars
+                            </span>
+                          </div>
+                        );
+                      })()}
+                      {/* Rendered Markdown output */}
+                      <div className="prose-custom">
+                        {renderMarkdown(displayedOutput)}
                         {displayedOutput !== output && (
-                          <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity }} className="inline-block w-1.5 h-6 bg-blue-500 ml-1 translate-y-1" />
+                          <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity }} className="inline-block w-1.5 h-5 bg-indigo-400 ml-1 translate-y-1 rounded-sm" />
                         )}
                       </div>
                     </motion.div>

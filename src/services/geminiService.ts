@@ -12,7 +12,10 @@ export const CONTENT_TEMPLATES = {
   ad: "Create high-converting ad copy for Facebook and Google for the product {topic}. Included keywords: {keywords}. Tone: {tone}. Focus on benefits and include a strong call to action: {cta}.",
   product: "Write a compelling product description for {topic}. Included keywords: {keywords}. Tone: {tone}. Highlight key features and benefits.",
   social: "Generate 5 engaging social media posts for {topic}. Included keywords: {keywords}. Tone: {tone}. Use emojis and relevant hashtags.",
-  email: "Draft a 3-part email sequence for {topic}. Included keywords: {keywords}. Tone: {tone}. Aim for high open rates and clicks."
+  email: "Draft a 3-part email sequence for {topic}. Included keywords: {keywords}. Tone: {tone}. Aim for high open rates and clicks.",
+  youtube: "Write a complete YouTube video script for a video about '{topic}'. Tone: {tone}. Target Audience: {audience}. Structure: Hook (first 15 seconds to grab attention), Introduction (brief channel intro), Main Content (3-5 key sections with transitions), Call to Action (subscribe, like, comment), Outro. Use conversational language and include [PAUSE], [B-ROLL], and [ON-SCREEN TEXT] cues where appropriate.",
+  twitter: "Write a Twitter/X thread about '{topic}'. Tone: {tone}. Keywords: {keywords}. Format: Start with a powerful hook tweet (1/), then write 6-9 follow-up tweets (2/, 3/, etc.), each under 280 characters, ending with a summary/CTA tweet. Use line breaks between tweets. Make each tweet standalone but connected.",
+  coldemail: "Write a cold outreach email about '{topic}'. Tone: {tone}. Target Audience: {audience}. Call to Action: {cta}. Structure: Catchy subject line, personalized opener (2 sentences), value proposition (2-3 sentences), social proof (1 sentence), clear CTA (1 sentence), professional sign-off. Keep total email under 150 words.",
 };
 
 // 🔥 COMMON BACKEND CALL
