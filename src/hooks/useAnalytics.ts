@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-const GA4_ID = import.meta.env.VITE_GA4_ID;
+const GA4_ID = 'G-CV86CPFYH7';
 
 export function trackPageView(path: string, title?: string) {
   if (!GA4_ID || !window.gtag) return;
