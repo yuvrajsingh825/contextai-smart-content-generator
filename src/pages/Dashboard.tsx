@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { formatNumber } from '../lib/utils';
 import { Link } from 'react-router-dom';
+import AdUnit from '../components/AdUnit';
 
 interface DashboardProps {
   user: any;
@@ -206,6 +207,13 @@ export default function Dashboard({ user, profile }: DashboardProps) {
               ))}
             </div>
           )}
+
+          {/* AdSense Unit below history */}
+          {!loading && history.length > 2 && (
+            <div className="mt-8">
+              <AdUnit slot="YOUR_AD_SLOT_ID" className="max-w-2xl mx-auto" />
+            </div>
+          )}
         </section>
 
         {/* Sidebar */}
@@ -263,6 +271,19 @@ export default function Dashboard({ user, profile }: DashboardProps) {
               <div className="mt-8 text-center">
                  <p className="text-[8px] text-slate-600 font-medium uppercase tracking-widest">Links may contain affiliate tracking</p>
               </div>
+           </div>
+
+           {/* Pro Features Placeholder */}
+           <div className="mt-8 p-6 rounded-3xl bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 relative group cursor-pointer overflow-hidden">
+              <div className="relative z-10">
+                 <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1 flex items-center gap-2">
+                   <Sparkles className="w-3 h-3" />
+                   Pro Features
+                 </p>
+                 <p className="text-xs font-black text-white uppercase tracking-tight">ContextAI Pro (Coming Soon)</p>
+                 <p className="text-[10px] text-slate-500 mt-2 font-medium">Advanced AI models, team workspaces, and custom integrations.</p>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/0 via-white/5 to-purple-600/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
            </div>
         </aside>
       </div>

@@ -3,6 +3,7 @@ import { generateContent, summarizeContent } from '../services/geminiService';
 import { saveGeneratedContent, getContentHistory } from '../services/firebaseService';
 import { motion, AnimatePresence } from 'motion/react';
 import { jsPDF } from 'jspdf';
+import AdUnit from '../components/AdUnit';
 import { 
   Sparkles, 
   Send, 
@@ -573,6 +574,13 @@ export default function GeneratorPage({ user, profile, onContentGenerated }: Gen
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* AdSense Unit */}
+            {output && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-8 max-w-4xl mx-auto w-full">
+                <AdUnit slot="YOUR_AD_SLOT_ID" />
+              </motion.div>
+            )}
           </section>
         </div>
       </div>
