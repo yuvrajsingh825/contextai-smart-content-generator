@@ -210,33 +210,58 @@ export default function Dashboard({ user, profile }: DashboardProps) {
 
         {/* Sidebar */}
         <aside className="space-y-8">
-           <div className="p-8 rounded-[2.5rem] glass-card relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none" />
+           <div className="p-8 rounded-[2.5rem] glass-card relative overflow-hidden border border-indigo-500/10">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none" />
               <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-8 flex items-center gap-3">
-                <Sparkles className="w-4 h-4 text-blue-500" />
-                Growth Tactics
+                <Zap className="w-4 h-4 text-indigo-400" />
+                Creator Stack
               </h3>
-              <ul className="space-y-6">
-                 {[
-                   "Anchor your hooks with emotional triggers.",
-                   "Deploy the 'Persuasive' module for conversions.",
-                   "Extended prompts unlock deeper neural paths."
-                 ].map((tip, i) => (
-                   <li key={i} className="flex gap-5 text-[11px] font-bold text-slate-500 leading-relaxed group">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-slate-900 border border-white/5 flex items-center justify-center text-[10px] font-black text-slate-400 group-hover:border-blue-500/30 group-hover:text-blue-400 transition-all">
-                        0{i + 1}
-                      </div>
-                      <span className="pt-1.5">{tip}</span>
-                   </li>
-                 ))}
-              </ul>
               
-              <div className="mt-12 p-6 rounded-3xl bg-blue-600/5 border border-blue-500/10 relative group cursor-pointer overflow-hidden">
-                 <div className="relative z-10">
-                    <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Coming Soon</p>
-                    <p className="text-xs font-black text-white uppercase tracking-tight">AI Voice Synthesis</p>
-                 </div>
-                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-white/5 to-blue-600/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <div className="space-y-4">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Recommended Tools</p>
+                
+                {/* Affiliate Link 1 */}
+                <a href="#" target="_blank" rel="noopener noreferrer" className="block p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+                      <span className="text-blue-400 font-black">N</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Notion AI</h4>
+                      <p className="text-[10px] text-slate-500 font-medium mt-1">Organize your generated content</p>
+                    </div>
+                  </div>
+                </a>
+
+                {/* Affiliate Link 2 */}
+                <a href="#" target="_blank" rel="noopener noreferrer" className="block p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
+                      <span className="text-orange-400 font-black">H</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Hostinger</h4>
+                      <p className="text-[10px] text-slate-500 font-medium mt-1">Deploy your SEO blogs instantly</p>
+                    </div>
+                  </div>
+                </a>
+                
+                {/* Affiliate Link 3 */}
+                <a href="#" target="_blank" rel="noopener noreferrer" className="block p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+                      <span className="text-purple-400 font-black">C</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">Canva Pro</h4>
+                      <p className="text-[10px] text-slate-500 font-medium mt-1">Design graphics for your posts</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              
+              <div className="mt-8 text-center">
+                 <p className="text-[8px] text-slate-600 font-medium uppercase tracking-widest">Links may contain affiliate tracking</p>
               </div>
            </div>
         </aside>
