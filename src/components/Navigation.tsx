@@ -49,8 +49,8 @@ export default function Navigation({ user, profile }: NavigationProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="hidden sm:flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-3">
                 <div className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden group transition-all duration-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]">
                   <div className="absolute inset-0 bg-emerald-400/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
                   <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.8)] relative z-10 animate-pulse" />
@@ -58,20 +58,40 @@ export default function Navigation({ user, profile }: NavigationProps) {
                     {(profile?.freeCredits || 0) + (profile?.paidCredits || 0)} Credits
                   </span>
                 </div>
-                
+
                 <button
                   onClick={logOut}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 hover:text-red-400 transition-all text-slate-400 text-[10px] font-black uppercase tracking-widest"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/5 bg-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all text-slate-400 text-[10px] font-black uppercase tracking-widest"
                   title="Log Out"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span className="hidden lg:inline">Logout</span>
                 </button>
               </div>
+
+              {/* User Avatar */}
+              <Link to="/profile" className="group relative flex items-center gap-2.5 pl-3 border-l border-white/10">
+                <div className="hidden lg:flex flex-col items-end">
+                  <span className="text-xs font-black text-white leading-tight">{user?.displayName?.split(' ')[0] || 'User'}</span>
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-400">{profile?.plan || 'Free'}</span>
+                </div>
+                {user?.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName || 'User'}
+                    className="w-9 h-9 rounded-2xl border-2 border-white/10 group-hover:border-indigo-500/50 transition-all object-cover shadow-lg"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-black border-2 border-white/10 group-hover:border-indigo-500/50 transition-all">
+                    {(user?.displayName || user?.email || 'U')[0].toUpperCase()}
+                  </div>
+                )}
+              </Link>
             </div>
           </div>
         </div>
       </nav>
+
 
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] px-4 pb-4">
