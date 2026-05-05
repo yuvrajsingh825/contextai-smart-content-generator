@@ -60,9 +60,9 @@ export default function LandingPage() {
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 leading-[1.05]">
-            <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">Stop Thinking.</span>
+            <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">Generate Smart AI Content</span>
             <br className="hidden md:block" />
-            <span className="bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#9333EA] bg-clip-text text-transparent">Start Creating.</span>
+            <span className="bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#9333EA] bg-clip-text text-transparent">in Seconds 🚀</span>
           </h1>
 
           <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-14 font-medium leading-relaxed">
@@ -74,7 +74,7 @@ export default function LandingPage() {
             <Link to="/auth" className="relative group w-full sm:w-auto overflow-hidden px-10 py-5 bg-gradient-to-r from-[#4F46E5] to-[#9333EA] text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-[0_20px_50px_rgba(79,70,229,0.4)] hover:shadow-[0_25px_60px_rgba(147,51,234,0.6)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.15),transparent)] -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               <Sparkles className="w-4 h-4" />
-              Start Creating Free
+              Try Now Free
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link to="/studio" className="w-full sm:w-auto px-10 py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-3 group">
@@ -263,14 +263,21 @@ export default function LandingPage() {
             <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
             <span>© 2026 ContextAI — Built by Yuvraj Singh</span>
           </div>
-          <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-600">
-            <Link to="/studio" className="hover:text-white transition-colors">AI Studio</Link>
-            <Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
-            <Link to="/auth" className="hover:text-white transition-colors">Sign In</Link>
-            <a href="#feedback" className="hover:text-white transition-colors">Feedback</a>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-600 mt-4 md:mt-0">
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <a href="#feedback" className="hover:text-white transition-colors">Contact Us</a>
           </div>
         </div>
       </footer>
+      
+      {/* Sticky CTA (Mobile only) */}
+      <div className="md:hidden fixed bottom-6 left-0 right-0 px-6 z-50">
+        <Link to="/auth" className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-[#4F46E5] to-[#9333EA] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl border border-white/20">
+          <Sparkles className="w-4 h-4" />
+          Try Now Free
+        </Link>
+      </div>
     </div>
   );
 }

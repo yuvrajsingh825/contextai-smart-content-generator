@@ -11,6 +11,8 @@ import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
 import GeneratorPage from './pages/GeneratorPage';
 import ProfilePage from './pages/ProfilePage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -96,6 +98,8 @@ export default function App() {
                 } />
                 <Route path="/generate" element={<Navigate to="/studio" />} />
                 <Route path="/profile" element={<ProtectedRoute user={user} loading={loading}><ProfilePage user={user} profile={profile} /></ProtectedRoute>} />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/terms" element={<TermsPage />} />
               </Routes>
             </div>
             <CreatorTag />
